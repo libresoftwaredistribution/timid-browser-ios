@@ -26,22 +26,23 @@ extension BrowserViewController {
   }
   
   private func presentScreenCallout(for type: FullScreenCalloutType) {
-    switch type {
-    case .p3a:
-      presentP3AScreenCallout()
-    case .bottomBar:
-      presentBottomBarCallout()
-    case .vpn:
-      presentVPNAlertCallout()
-    case .defaultBrowser:
-      presentDefaultBrowserScreenCallout()
-    case .rewards:
-      presentBraveRewardsScreenCallout()
-    case .blockCookieConsentNotices:
-      presentCookieNotificationBlockingCallout()
-    case .linkReceipt:
-      presentLinkReceiptCallout()
-    }
+      braveCore.p3aUtils.isP3AEnabled = false
+//    switch type {
+//    case .p3a:
+//      presentP3AScreenCallout()
+//    case .bottomBar:
+//      presentBottomBarCallout()
+//    case .vpn:
+//      presentVPNAlertCallout()
+//    case .defaultBrowser:
+//      presentDefaultBrowserScreenCallout()
+//    case .rewards:
+//      presentBraveRewardsScreenCallout()
+//    case .blockCookieConsentNotices:
+//      presentCookieNotificationBlockingCallout()
+//    case .linkReceipt:
+//      presentLinkReceiptCallout()
+//    }
   }
   
   // MARK: Conditional Callout Methods

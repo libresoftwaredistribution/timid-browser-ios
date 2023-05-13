@@ -147,6 +147,7 @@ class SettingsViewController: TableViewController {
     ]
 
     let shouldShowVPNSection = { () -> Bool in
+      return false
       if !VPNProductInfo.isComplete || Preferences.VPN.vpnSettingHeaderWasDismissed.value {
         return false
       }
@@ -249,29 +250,29 @@ class SettingsViewController: TableViewController {
       ]
     }
 
-    section.rows.append(
-      Row(
-        text: Strings.BraveNews.braveNews,
-        selection: {
-          let controller = NewsSettingsViewController(dataSource: self.feedDataSource, openURL: { [weak self] url in
-            guard let self else { return }
-            self.dismiss(animated: true)
-            self.settingsDelegate?.settingsOpenURLs([url])
-          })
-          controller.viewDidDisappear = {
-            if Preferences.Review.braveNewsCriteriaPassed.value {
-              AppReviewManager.shared.isRevisedReviewRequired = true
-              Preferences.Review.braveNewsCriteriaPassed.value = false
-            }
-          }
-          self.navigationController?.pushViewController(controller, animated: true)
-        }, image: UIImage(braveSystemNamed: "leo.product.brave-news"), accessory: .disclosureIndicator)
-    )
-
-    vpnRow = vpnSettingsRow()
-    if let vpnRow = vpnRow {
-      section.rows.append(vpnRow)
-    }
+//    section.rows.append(
+//      Row(
+//        text: Strings.BraveNews.braveNews,
+//        selection: {
+//          let controller = NewsSettingsViewController(dataSource: self.feedDataSource, openURL: { [weak self] url in
+//            guard let self else { return }
+//            self.dismiss(animated: true)
+//            self.settingsDelegate?.settingsOpenURLs([url])
+//          })
+//          controller.viewDidDisappear = {
+//            if Preferences.Review.braveNewsCriteriaPassed.value {
+//              AppReviewManager.shared.isRevisedReviewRequired = true
+//              Preferences.Review.braveNewsCriteriaPassed.value = false
+//            }
+//          }
+//          self.navigationController?.pushViewController(controller, animated: true)
+//        }, image: UIImage(braveSystemNamed: "leo.product.brave-news"), accessory: .disclosureIndicator)
+//    )
+//
+//    vpnRow = vpnSettingsRow()
+//    if let vpnRow = vpnRow {
+//      section.rows.append(vpnRow)
+//    }
 
     section.rows.append(
       Row(
@@ -488,10 +489,10 @@ class SettingsViewController: TableViewController {
         title: Strings.showBookmarkButtonInTopToolbar,
         option: Preferences.General.showBookmarkToolbarShortcut,
         image: UIImage(braveSystemNamed: "leo.product.bookmarks")),
-      .boolRow(
-        title: Strings.hideRewardsIcon,
-        option: Preferences.Rewards.hideRewardsIcon,
-        image: UIImage(braveSystemNamed: "leo.product.bat-outline")),
+//      .boolRow(
+//        title: Strings.hideRewardsIcon,
+//        option: Preferences.Rewards.hideRewardsIcon,
+//        image: UIImage(braveSystemNamed: "leo.product.bat-outline")),
     ])
 
     return display
@@ -566,22 +567,24 @@ class SettingsViewController: TableViewController {
         Row(
           text: Strings.reportABug,
           selection: { [unowned self] in
-            self.settingsDelegate?.settingsOpenURLInNewTab(.brave.community)
+            self.settingsDelegate?.settingsOpenURLInNewTab(
+              URL(string: "https://github.com/libresoftwaredistribution/timid-browser-ios/issues")!
+            )
             self.dismiss(animated: true)
           },
           image: UIImage(braveSystemNamed: "leo.bug"),
           cellClass: MultilineValue1Cell.self),
-        Row(
-          text: Strings.rateBrave,
-          selection: { [unowned self] in
-            // Rate Brave
-            guard let writeReviewURL = URL(string: "https://itunes.apple.com/app/id1052879175?action=write-review")
-            else { return }
-            UIApplication.shared.open(writeReviewURL)
-            self.dismiss(animated: true)
-          },
-          image: UIImage(braveSystemNamed: "leo.comment.smile-square"),
-          cellClass: MultilineValue1Cell.self),
+//        Row(
+//          text: Strings.rateBrave,
+//          selection: { [unowned self] in
+//            // Rate Brave
+//            guard let writeReviewURL = URL(string: "https://itunes.apple.com/app/id1052879175?action=write-review")
+//            else { return }
+//            UIApplication.shared.open(writeReviewURL)
+//            self.dismiss(animated: true)
+//          },
+//          image: UIImage(braveSystemNamed: "leo.comment.smile-square"),
+//          cellClass: MultilineValue1Cell.self),
       ]
     )
   }()
@@ -619,22 +622,22 @@ class SettingsViewController: TableViewController {
             actionSheet.addAction(UIAlertAction(title: Strings.cancelButtonTitle, style: .cancel, handler: nil))
             self.navigationController?.present(actionSheet, animated: true, completion: nil)
           }, cellClass: MultilineValue1Cell.self),
-        Row(
-          text: Strings.privacyPolicy,
-          selection: { [unowned self] in
-            // Show privacy policy
-            let privacy = SettingsContentViewController().then { $0.url = .brave.privacy }
-            self.navigationController?.pushViewController(privacy, animated: true)
-          },
-          accessory: .disclosureIndicator, cellClass: MultilineValue1Cell.self),
-        Row(
-          text: Strings.termsOfUse,
-          selection: { [unowned self] in
-            // Show terms of use
-            let toc = SettingsContentViewController().then { $0.url = .brave.termsOfUse }
-            self.navigationController?.pushViewController(toc, animated: true)
-          },
-          accessory: .disclosureIndicator, cellClass: MultilineValue1Cell.self),
+//        Row(
+//          text: Strings.privacyPolicy,
+//          selection: { [unowned self] in
+//            // Show privacy policy
+//            let privacy = SettingsContentViewController().then { $0.url = .brave.privacy }
+//            self.navigationController?.pushViewController(privacy, animated: true)
+//          },
+//          accessory: .disclosureIndicator, cellClass: MultilineValue1Cell.self),
+//        Row(
+//          text: Strings.termsOfUse,
+//          selection: { [unowned self] in
+//            // Show terms of use
+//            let toc = SettingsContentViewController().then { $0.url = .brave.termsOfUse }
+//            self.navigationController?.pushViewController(toc, animated: true)
+//          },
+//          accessory: .disclosureIndicator, cellClass: MultilineValue1Cell.self),
         Row(
           text: Strings.settingsLicenses,
           selection: { [unowned self] in

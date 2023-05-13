@@ -452,57 +452,57 @@ class NewTabPageViewController: UIViewController {
   }
 
   private func presentNotification() {
-    if PrivateBrowsingManager.shared.isPrivateBrowsing || notificationShowing {
-      return
-    }
-
-    var isShowingSponseredImage = false
-    if case .withBrandLogo(let logo) = background.currentBackground?.type, logo != nil {
-      isShowingSponseredImage = true
-    }
-
-    guard
-      let notification = notifications.notificationToShow(
-        isShowingBackgroundImage: background.currentBackground != nil,
-        isShowingSponseredImage: isShowingSponseredImage
-      )
-    else {
-      return
-    }
-
-    var vc: UIViewController?
-
-    switch notification {
-    case .brandedImages(let state):
-      if Preferences.NewTabPage.atleastOneNTPNotificationWasShowed.value { return }
-
-      guard let notificationVC = NTPNotificationViewController(state: state, rewards: rewards) else { return }
-
-      notificationVC.closeHandler = { [weak self] in
-        self?.notificationController = nil
-      }
-
-      notificationVC.learnMoreHandler = { [weak self] in
-        self?.delegate?.brandedImageCalloutActioned(state)
-      }
-
-      vc = notificationVC
-    }
-
-    guard let viewController = vc else { return }
-    notificationController = viewController
-    visibleNotification = notification
-
-    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-      guard let self = self else { return }
-
-      if case .brandedImages = notification {
-        Preferences.NewTabPage.atleastOneNTPNotificationWasShowed.value = true
-      }
-
-      self.addChild(viewController)
-      self.view.addSubview(viewController.view)
-    }
+//    if PrivateBrowsingManager.shared.isPrivateBrowsing || notificationShowing {
+//      return
+//    }
+//
+//    var isShowingSponseredImage = false
+//    if case .withBrandLogo(let logo) = background.currentBackground?.type, logo != nil {
+//      isShowingSponseredImage = true
+//    }
+//
+//    guard
+//      let notification = notifications.notificationToShow(
+//        isShowingBackgroundImage: background.currentBackground != nil,
+//        isShowingSponseredImage: isShowingSponseredImage
+//      )
+//    else {
+//      return
+//    }
+//
+//    var vc: UIViewController?
+//
+//    switch notification {
+//    case .brandedImages(let state):
+//      if Preferences.NewTabPage.atleastOneNTPNotificationWasShowed.value { return }
+//
+//      guard let notificationVC = NTPNotificationViewController(state: state, rewards: rewards) else { return }
+//
+//      notificationVC.closeHandler = { [weak self] in
+//        self?.notificationController = nil
+//      }
+//
+//      notificationVC.learnMoreHandler = { [weak self] in
+//        self?.delegate?.brandedImageCalloutActioned(state)
+//      }
+//
+//      vc = notificationVC
+//    }
+//
+//    guard let viewController = vc else { return }
+//    notificationController = viewController
+//    visibleNotification = notification
+//
+//    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+//      guard let self = self else { return }
+//
+//      if case .brandedImages = notification {
+//        Preferences.NewTabPage.atleastOneNTPNotificationWasShowed.value = true
+//      }
+//
+//      self.addChild(viewController)
+//      self.view.addSubview(viewController.view)
+//    }
   }
 
   private func hideNotification() {
@@ -706,6 +706,7 @@ class NewTabPageViewController: UIViewController {
   }
 
   @objc private func checkForUpdatedFeed() {
+    return ()
     if !isBraveNewsVisible || Preferences.BraveNews.isShowingOptIn.value { return }
     if collectionView.contentOffset.y == collectionView.contentInset.top {
       // Reload contents if the user is not currently scrolled into the feed
@@ -855,7 +856,7 @@ extension NewTabPageViewController: PreferencesObserver {
 // MARK: - UIScrollViewDelegate
 extension NewTabPageViewController {
   var isBraveNewsVisible: Bool {
-    return !PrivateBrowsingManager.shared.isPrivateBrowsing && (Preferences.BraveNews.isEnabled.value || Preferences.BraveNews.isShowingOptIn.value)
+    return false // !PrivateBrowsingManager.shared.isPrivateBrowsing && (Preferences.BraveNews.isEnabled.value || Preferences.BraveNews.isShowingOptIn.value)
   }
   
   func scrollViewDidScroll(_ scrollView: UIScrollView) {

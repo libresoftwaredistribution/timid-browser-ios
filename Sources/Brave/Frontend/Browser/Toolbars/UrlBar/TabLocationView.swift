@@ -214,6 +214,7 @@ class TabLocationView: UIView {
     button.accessibilityLabel = Strings.bravePanel
     button.imageView?.adjustsImageSizeForAccessibilityContentSizeCategory = true
     button.accessibilityIdentifier = "urlBar-shieldsButton"
+    button.sizeToFit()
     return button
   }()
 

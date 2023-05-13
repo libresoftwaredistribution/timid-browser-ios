@@ -163,6 +163,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   @discardableResult
   fileprivate func startApplication(_ application: UIApplication, withLaunchOptions launchOptions: [AnyHashable: Any]?) -> Bool {
     log.info("startApplication begin")
+    overrideOptions()
 
     // Set the Safari UA for browsing.
     setUserAgent()
@@ -230,7 +231,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       let languageCode = Locale.preferredLanguages.first?.prefix(2) {
       Preferences.BraveNews.languageChecked.value = true
       // Base opt-in visibility on whether or not the user's language is supported in BT
-      Preferences.BraveNews.isShowingOptIn.value = FeedDataSource.supportedLanguages.contains(String(languageCode)) || FeedDataSource.knownSupportedLocales.contains(Locale.current.identifier)
+      Preferences.BraveNews.isShowingOptIn.value = false // FeedDataSource.supportedLanguages.contains(String(languageCode)) || FeedDataSource.knownSupportedLocales.contains(Locale.current.identifier)
     }
 
     SystemUtils.onFirstRun()
@@ -239,12 +240,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     braveCore.scheduleLowPriorityStartupTasks()
 
     log.info("startApplication end")
+    overrideOptions()
     return true
   }
 
+  func overrideOptions() {
+    Preferences.FullScreenCallout.blockCookieConsentNoticesCalloutCompleted.value = true
+    Preferences.FullScreenCallout.bottomBarCalloutCompleted.value =  true
+    Preferences.FullScreenCallout.vpnCalloutCompleted.value = true
+    Preferences.FullScreenCallout.rewardsCalloutCompleted.value = true
+    Preferences.FullScreenCallout.ntpCalloutCompleted.value = true
+    Preferences.FullScreenCallout.omniboxCalloutCompleted.value = true
+    Preferences.Rewards.hideRewardsIcon.value = true
+    Preferences.ISearch.defaultEngineName.value = "startpage"
+    Preferences.ISearch.defaultPrivateEngineName.value = "startpage"
+    Preferences.ISearch.braveSearchDefaultBrowserPromptCount.value = 1000
+    Preferences.IBraveSearch.braveSearchPromotionCompletionState.value = 3
+    Preferences.INewTabPage.backgroundImages.value = true
+    Preferences.INewTabPage.backgroundSponsoredImages.value = true
+    Preferences.INewTabPage.atleastOneNTPNotificationWasShowed.value = true
+    Preferences.INewTabPage.brandedImageShowed.value = true
+    Preferences.INewTabPage.attemptToShowClaimRewardsNotification.value = false
+    Preferences.INewTabPage.backgroundImages.value = true
+    Preferences.IBraveNews.isEnabled.value = false
+  }
+  
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     // IAPs can trigger on the app as soon as it launches,
     // for example when a previous transaction was not finished and is in pending state.
+    overrideOptions()
     SKPaymentQueue.default().add(BraveVPN.iapObserver)
 
     // Override point for customization after application launch.
@@ -363,6 +387,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       await self.cleanUpLargeTemporaryDirectory()
     }
     
+    overrideOptions()
     return shouldPerformAdditionalDelegateHandling
   }
   
@@ -512,4 +537,54 @@ extension AppDelegate {
     // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
     // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
   }
+}
+
+
+private extension Preferences {
+    
+    final class ISearch {
+      /// The default selected search engine in regular mode
+      static let defaultEngineName = Option<String?>(key: "search.default.name", default: nil)
+      /// The default selected search engine in private mode
+      static let defaultPrivateEngineName = Option<String?>(key: "search.defaultprivate.name", default: nil)
+      static let braveSearchDefaultBrowserPromptCount =
+        Option<Int>(key: "search.brave-search-default-website-prompt", default: 0)
+    }
+    
+    final class IBraveSearch {
+      /// Whether or not  user interacted with brave search promotion
+      /// User tapping on maybe later on promotion onboarding does NOT count as dismissed.
+      /// Next session after clicking 'maybe later' dismiss will be shown to user
+      static let braveSearchPromotionCompletionState = Option<Int>(key: "brave-search.promo-completion-state", default: 3)
+    }
+    
+    final class INewTabPage {
+      /// Whether bookmark image are enabled / shown
+      static let backgroundImages = Option<Bool>(key: "newtabpage.background-images", default: true)
+      /// Whether sponsored images are included into the background image rotation
+      static let backgroundSponsoredImages = Option<Bool>(key: "newtabpage.background-sponsored-images", default: true)
+
+      /// At least one notification must show before we lock showing subsequent notifications.
+      static let atleastOneNTPNotificationWasShowed = Option<Bool>(
+        key: "newtabpage.one-notificaiton-showed",
+        default: false)
+
+      /// Whether the callout to use branded image was shown.
+      static let brandedImageShowed = Option<Bool>(
+        key: "newtabpage.branded-image-callout-showed",
+        default: false)
+
+      /// When true, a notification on new tab page will be shown that an ad grant can be claimed(if rewards and grant are available).
+      /// This value is reseted on each app launch,
+      /// The goal is to show the claim grant notification only once per app session if still available.
+      static let attemptToShowClaimRewardsNotification =
+        Option<Bool>(key: "newtabpage.show-grant-notification", default: true)
+
+    }
+
+    final class IBraveNews {
+        public static let isShowingOptIn = Option<Bool>(key: "brave-today.showing-opt-in", default: false)
+        public static let userOptedIn = Option<Bool>(key: "brave-today.user-opted-in", default: false)
+        public static let isEnabled = Option<Bool>(key: "brave-today.enabled", default: true)
+    }
 }

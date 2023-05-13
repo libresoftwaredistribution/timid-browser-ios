@@ -24,6 +24,8 @@ class NewTabPageNotifications {
     isShowingBackgroundImage: Bool,
     isShowingSponseredImage: Bool
   ) -> NotificationType? {
+    return .brandedImages(state: .dontShow)
+
     if !isShowingBackgroundImage {
       return nil
     }

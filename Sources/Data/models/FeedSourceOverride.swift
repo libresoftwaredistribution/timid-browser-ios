@@ -13,6 +13,7 @@ public final class FeedSourceOverride: NSManagedObject, CRUD {
   public class func get(fromId id: String) -> FeedSourceOverride? {
     getInternal(fromId: id)
   }
+    
 
   public class func all() -> [FeedSourceOverride] {
     all() ?? []

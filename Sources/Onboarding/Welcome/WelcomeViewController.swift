@@ -413,7 +413,7 @@ public class WelcomeViewController: UIViewController {
 
       break
     }
-    
+
     Preferences.Onboarding.basicOnboardingProgress.value = OnboardingProgress.newTabPage.rawValue
     presenting.dismiss(animated: false, completion: nil)
   }
@@ -448,7 +448,7 @@ extension WelcomeViewController {
   }
 }
 
-private class WelcomeAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+internal class WelcomeAnimator: NSObject, UIViewControllerAnimatedTransitioning {
   let isPresenting: Bool
 
   private struct WelcomeViewInfo {

@@ -633,7 +633,7 @@ extension Strings {
       "optionsMenu.menuSectionTitle",
       tableName: "BraveShared",
       bundle: .module,
-      value: "Brave Features",
+      value: "Features",
       comment: "Privacy Features Section title")
     public static let braveVPNItemTitle = NSLocalizedString(
       "optionsMenu.braveVPNItemTitle",
@@ -1023,7 +1023,7 @@ extension Strings {
 
   public static let features = NSLocalizedString("Features", tableName: "BraveShared", bundle: .module, value: "Features", comment: "")
 
-  public static let braveShieldsAndPrivacy = NSLocalizedString("BraveShieldsAndPrivacy", tableName: "BraveShared", bundle: .module, value: "Brave Shields & Privacy", comment: "")
+  public static let braveShieldsAndPrivacy = NSLocalizedString("BraveShieldsAndPrivacy", tableName: "BraveShared", bundle: .module, value: "Shields & Privacy", comment: "")
   public static let bookmarksImportAction = NSLocalizedString("bookmarksImportAction", tableName: "BraveShared", bundle: .module, value: "Import Bookmarks", comment: "Action to import bookmarks from a file.")
   public static let bookmarksExportAction = NSLocalizedString("bookmarksExportAction", tableName: "BraveShared", bundle: .module, value: "Export Bookmarks", comment: "Action to export bookmarks to another device.")
 }
